@@ -5,13 +5,15 @@ import os
 import ast
 
 # Load your reviews (can functionize - only do once)
-df = pd.read_csv(r"data\data_test.csv", header=None, names=['rating', 'review', 'asin', 'user_id', 'helpful_vote', 'verified_purchase', 'main_category', 'average_rating', 'price', 'os', 'color', 'brand', 'annotated'])
+df = pd.read_csv(r"data\data_test.csv", header=None, names=['',	'rating', 'title', 'text',	'images', 'asin', 'parent_asin', 'user_id',	'timestamp',
+                                                            	'helpful_vote',	'verified_purchase', 'main_category', 'average_rating', 'price',
+                                                                'os', 'color', 'brand','annotated'])
 df['annotated'] = df['annotated'].fillna('')  # Fill NaNs with empty strings
 
 # Create new df with full reviews instead of splitting into sentences
-new_df = pd.DataFrame(columns=['raw_text'])
+new_df = pd.DataFrame(columns=['text'])
 for index, row in df.iterrows():
-    review = row['review'].strip()  # Lấy toàn bộ đoạn review
+    review = row['text'].strip()  # Lấy toàn bộ đoạn review
     if review:  # Chỉ thêm vào nếu review không rỗng
         new_df.loc[len(new_df)] = [review]
 
@@ -113,7 +115,7 @@ class ABSAAnnotationApp:
             else:
                 self.df['aspectTerms'].fillna('', inplace=True)
         except FileNotFoundError:
-            self.df = pd.DataFrame(columns=['raw_text', 'aspectTerms'])
+            self.df = pd.DataFrame(columns=['text', 'aspectTerms'])
 
     def find_first_unannotated_index(self):
         unannotated = self.df[self.df['aspectTerms'] == ''].index
@@ -123,7 +125,7 @@ class ABSAAnnotationApp:
 
     def load_sentence(self):
         if 0 <= self.current_index < len(self.df):
-            sentence = self.df.iloc[self.current_index]["raw_text"]
+            sentence = self.df.iloc[self.current_index]["text"]
             self.text_widget.delete(1.0, "end")
             self.text_widget.insert("end", sentence)
             # Load existing aspects if any

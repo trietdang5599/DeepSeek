@@ -186,7 +186,7 @@ async function sendRequests(data) {
         if (!item.text) continue; // Bỏ qua dòng không có nội dung
 
         try {
-            const response = await fetch("http://10.0.104.119:9099/api/chat", {
+            const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ message: item.text })

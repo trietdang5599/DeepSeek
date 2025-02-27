@@ -77,7 +77,6 @@ async def chat():
     headers = {
         "Authorization": "Bearer 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",
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://10.0.104.119:9099",
         "X-Title": "ChatBot"
     }
 

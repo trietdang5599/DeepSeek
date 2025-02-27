@@ -5,7 +5,7 @@ import os
 import ast
 
 # Load your reviews (can functionize - only do once)
-df = pd.read_csv(r"C:\Users\qt321\Downloads\final_laptop_dataset.csv", header=None, names=['rating', 'review', 'asin', 'user_id', 'helpful_vote', 'verified_purchase', 'main_category', 'average_rating', 'price', 'os', 'color', 'brand', 'annotated'])
+df = pd.read_csv(r"data\data_test.csv", header=None, names=['rating', 'review', 'asin', 'user_id', 'helpful_vote', 'verified_purchase', 'main_category', 'average_rating', 'price', 'os', 'color', 'brand', 'annotated'])
 df['annotated'] = df['annotated'].fillna('')  # Fill NaNs with empty strings
 
 # Create new df with full reviews instead of splitting into sentences

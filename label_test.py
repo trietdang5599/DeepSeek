@@ -5,10 +5,11 @@ import os
 import ast
 
 # Load your reviews (can functionize - only do once)
-df = pd.read_csv(r"data\data_test.csv", header=None, names=['',	'rating', 'title', 'text',	'images', 'asin', 'parent_asin', 'user_id',	'timestamp',
-                                                            	'helpful_vote',	'verified_purchase', 'main_category', 'average_rating', 'price',
-                                                                'os', 'color', 'brand','annotated'])
-df['annotated'] = df['annotated'].fillna('')  # Fill NaNs with empty strings
+# df = pd.read_csv(r"data/final_data_test.csv", header=None, names=['reviewId', 'rating', 'title', 'text',	'images', 'asin', 'parent_asin', 'user_id',	'timestamp',
+#                                                             	'helpful_vote',	'verified_purchase', 'main_category', 'average_rating', 'price',
+#                                                                 'os', 'color', 'brand','annotated'])
+# df['annotated'] = df['annotated'].fillna('')  # Fill NaNs with empty strings
+df = pd.read_csv(r"data/final_data_test.csv", header=None, names=['reviewId','rating','text','asin','user_id','helpful_vote','verified_purchase'])
 
 # Create new df with full reviews instead of splitting into sentences
 new_df = pd.DataFrame(columns=['text'])
@@ -17,7 +18,7 @@ for index, row in df.iterrows():
     if review:  # Chỉ thêm vào nếu review không rỗng
         new_df.loc[len(new_df)] = [review]
 
-new_df.to_csv("sentences.csv", index=False)
+new_df.to_csv("annotation/sentences.csv", index=False)
 
 class ABSAAnnotationApp:
     def __init__(self, master, df_path):
@@ -203,7 +204,7 @@ class ABSAAnnotationApp:
             self.load_sentence()
 
     def save_progress(self):
-        self.df.to_csv("annotated_sentences.csv", index=False)
+        self.df.to_csv("annotation/annotated_sentences.csv", index=False)
 
     def update_category_list(self, category):
         """Thêm category mới vào listbox nếu chưa có."""
@@ -212,8 +213,8 @@ class ABSAAnnotationApp:
             self.category_listbox.insert(tk.END, category)
 
 root = tk.Tk()
-if os.path.exists("annotated_sentences.csv"):
-    app = ABSAAnnotationApp(root, "annotated_sentences.csv")
+if os.path.exists(r"annotation/annotated_sentences.csv"):
+    app = ABSAAnnotationApp(root, r"annotation/annotated_sentences.csv")
 else:
-    app = ABSAAnnotationApp(root, "sentences.csv")
+    app = ABSAAnnotationApp(root, r"annotation/sentences.csv")
 root.mainloop()

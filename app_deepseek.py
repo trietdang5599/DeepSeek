@@ -24,7 +24,7 @@ async def fetch_ai_response(payload, headers, max_retries=5):
                     clean_json_str = ai_response['content'].strip("```json").strip("```").strip()
                     ai_response_json = json.loads(clean_json_str)
 
-                    if "aspects" in ai_response_json and isinstance(ai_response_json["aspects"], list) and ai_response_json["aspects"]:
+                    if "aspectTerms" in ai_response_json and isinstance(ai_response_json["aspectTerms"], list) and ai_response_json["aspectTerms"]:
                         return ai_response_json  
 
                     print(f"⚠️ API attempt {attempt+1} failed: No valid aspects. Retrying...")
@@ -61,9 +61,9 @@ async def chat():
     # Tạo prompt theo định dạng yêu cầu
     prompt = f"""Extract the key aspects mentioned in the following review and return them in JSON format.
                  Ensure the response follows this format: 
-                 "aspects": [
-                            {{"aspect": "aspect1", "sentiment": "positive/neutral/negative"}},
-                            {{"aspect": "aspect2", "sentiment": "positive/neutral/negative"}}
+                 "aspectTerms": [
+                            {{"term": "term1", "polarity": "positive/neutral/negative"}},
+                            {{"term": "term2", "polarity": "positive/neutral/negative"}}
                 ]
                  Review: "{user_message}"."""
 

@@ -31,15 +31,20 @@ function sendMessage() {
 
         if (data.error) {
             botMessage.innerHTML = `<strong>AI:</strong> <span class="error">${data.error}</span>`;
-        } else if (data.aspects && data.aspects.length > 0) {
+        } else if (data.aspectTerms && data.aspectTerms.length > 0) {
             // Tạo danh sách aspects và sentiment
             let aspectList = "<ul>";
-            data.aspects.forEach(a => {
-                let sentimentColor = "gray"; // Mặc định màu trung tính
-                if (a.sentiment === "positive") sentimentColor = "green";
-                else if (a.sentiment === "negative") sentimentColor = "red";
+            data.aspectTerms.forEach(a => {
+                let polarityColor = "gray"; // Mặc định màu trung tính
+                if (a.polarity === "positive") polarityColor = "green";
+                else if (a.polarity === "negative") polarityColor = "red";
 
-                aspectList += `<li><strong>${a.aspect}</strong>: <span style="color:${sentimentColor}">${a.sentiment}</span></li>`;
+                aspectList += `<li>
+                                <strong>Term:</strong> ${a.term} <br>
+                                <strong>Opinion:</strong> <em>${a.opinion}</em> <br>
+                                <strong>Polarity:</strong> <span style="color:${a.polarity}">${a.polarity}</span>
+                            </li>`;
+
             });
             aspectList += "</ul>";
 
@@ -194,13 +199,13 @@ async function sendRequests(data) {
 
             const result = await response.json();
 
-            if (!result.error && result.aspects && result.aspects.length > 0) {
+            if (!result.error && result.aspectTerms && result.aspectTerms.length > 0) {
                 // Lưu kết quả vào mảng
                 processedResults.push({
                     asin: item.asin,
                     user_id: item.user_id,
                     text: item.text,
-                    aspects: result.aspects
+                    aspectTerms: result.aspectTerms
                 });
             }
         } catch (error) {

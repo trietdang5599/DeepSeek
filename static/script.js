@@ -81,31 +81,30 @@ function handleKeyPress(event) {
 
 let processedResults = []; // Lưu kết quả sau khi gọi API
 
+
 function hideDownloadButton(){
     const downloadButton = document.getElementById("download-button");
     downloadButton.style.display = "none";
 }
 
-function processFile() {
+function processFile(task) {
     const fileInput = document.getElementById("fileInput");
     const file = fileInput.files[0];
-    
     
     if (!file) {
         alert("Please choose JSON or CSV file!");
         return;
     }
 
-    
     const reader = new FileReader();
 
     reader.onload = function (event) {
         const content = event.target.result;
 
         if (file.name.endsWith(".json")) {
-            processJSON(content);
+            processJSON(content, task);
         } else if (file.name.endsWith(".csv")) {
-            processCSV(content);
+            processCSV(content, task);
         } else {
             alert("Only support for JSON or CSV file!");
         }
@@ -131,7 +130,7 @@ function fixJSON(content) {
     }
 }
 
-function processJSON(content) {
+function processJSON(content, task) {
     try {
         content = fixJSON(content);
         const data = JSON.parse(content);
@@ -140,15 +139,19 @@ function processJSON(content) {
             alert("File JSON không hợp lệ. Cần danh sách các đối tượng.");
             return;
         }
-
-        sendRequests(data);
+        if(task == 'extractAspects'){
+            sendRequests(data);
+        }
+        else{
+            preprocessingData(data);
+        }
     } catch (error) {
         console.error("Lỗi phân tích JSON:", error);
         alert("File JSON không hợp lệ.");
     }
 }
 
-function processCSV(content) {
+function processCSV(content, task) {
     const lines = content.split("\n");
     const headers = lines[0].split(",");
     const data = [];
@@ -168,8 +171,12 @@ function processCSV(content) {
             data.push(obj);
         }
     }
-
-    sendRequests(data);
+    if(task == 'extractAspects'){
+        sendRequests(data);
+    }
+    else{
+        preprocessingData(data);
+    }
 }
 
 async function sendRequests(data) {
@@ -240,3 +247,62 @@ function downloadResults() {
     link.download = "aspects_file.json";
     link.click();
 }
+
+
+//pre-processing data
+async function preprocessingData(data) {
+    processedResults = []; // Reset kết quả đã xử lý
+    const totalRequests = data.length;
+    let completedRequests = 0;
+
+    // Lấy các thành phần giao diện để hiển thị tiến trình
+    const progressBar = document.getElementById("progress-bar");
+    const progressIndicator = document.getElementById("progress-indicator");
+    const progressText = document.getElementById("progress-text");
+    const downloadButton = document.getElementById("download-button");
+
+    // Hiển thị thanh tiến trình và ẩn nút download ban đầu
+    progressBar.style.display = "block";
+    progressText.innerText = "Processing ... 0%";
+    downloadButton.style.display = "none";
+
+    // Duyệt qua từng phần tử của dữ liệu đầu vào
+    for (let item of data) {
+        if (!item.text) continue; // Bỏ qua nếu không có nội dung
+
+        try {
+            const response = await fetch("/run-preprocessing", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: item.text })
+            });
+            const result = await response.json();
+
+            // Giả sử API trả về kết quả ở thuộc tính 'sentences'
+            if (!result.error && result.sentences && result.sentences.length > 0) {
+                processedResults.push({
+                    asin: item.asin,
+                    user_id: item.user_id,
+                    text: item.text,
+                    processedText: result.sentences  // Mảng các câu sau tiền xử lý
+                });
+            }
+        } catch (error) {
+            console.error("Error calling preprocessing API:", error);
+        }
+
+        // Cập nhật thanh tiến trình
+        completedRequests++;
+        const progressPercent = Math.round((completedRequests / totalRequests) * 100);
+        progressIndicator.style.width = progressPercent + "%";
+        progressText.innerText = `Processing ... ${progressPercent}%`;
+    }
+
+    progressText.innerText = "Extraction completed";
+    downloadButton.style.display = "inline"; // Hiển thị nút download
+
+    setTimeout(() => {
+        progressBar.style.display = "none";
+    }, 2000);
+}
+

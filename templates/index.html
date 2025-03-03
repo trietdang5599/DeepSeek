@@ -17,7 +17,8 @@
         </div>
         <div id="file-upload-container">
             <input type="file" id="fileInput" accept=".json, .csv" onchange="hideDownloadButton()">
-            <button onclick="processFile()">Extract Aspects</button>
+            <button onclick="processFile(task='preProcessing')" style="background-color: blue;">Run Preprocessing</button>
+            <button onclick="processFile(task='extractAspects')">Extract Aspects</button>
             <button id="download-button" onclick="downloadResults()" style="background-color: green; display: none;">Download File Aspect</button>
         </div>
         <div id="progress-bar" style="width: 100%; background-color: #ccc; border-radius: 5px; margin-top: 10px; display: none;">

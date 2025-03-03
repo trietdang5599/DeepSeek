@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template, session
 import json
-import asyncio
 from openai import OpenAI
+from preprocessing import split_sentences_and_filter_sentiment
 
 MAX_SESSION_SIZE = 4000
 app = Flask(__name__)
@@ -13,7 +13,6 @@ client = OpenAI(
     organization="org-6OKJYIXzvTJPG0ykg9uQkWEX",
     project="proj_Y6a6fJdGqPDSlGgA8znbvL7D"
 )
-
 
 async def fetch_ai_response(payload, max_retries=5):
     """ Gọi API ChatGPT với tối đa 5 lần thử nếu phản hồi không hợp lệ """
@@ -94,5 +93,19 @@ def reset_chat():
     session.pop('chat_history', None)
     return jsonify({"message": "Chat history cleared"})
 
+@app.route('/run-preprocessing', methods=['POST'])
+def run_preprocessing():
+    data = request.json
+    review_text = data.get("text", "").strip()
+
+    if not review_text:
+        return jsonify({"error": "No text provided"}), 400
+
+    try:
+        sentences = split_sentences_and_filter_sentiment(review_text)
+        return jsonify({"sentences": sentences})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=9099, debug=True)

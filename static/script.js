@@ -1,9 +1,164 @@
+
+let processedResults = []; // Lưu kết quả sau khi gọi API
+let current_task = "";
+
+//#region event handler
 document.getElementById("message").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
         document.querySelector("#input-container button").click();
     }
 });
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function hideDownloadButton(){
+    const downloadButton = document.getElementById("download-button");
+    downloadButton.style.display = "none";
+}
+
+//#endregion
+
+//#region processing file
+function processFile(task) {
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert("Please choose JSON or CSV file!");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const content = event.target.result;
+
+        if (file.name.endsWith(".json")) {
+            processJSON(content, task);
+        } else if (file.name.endsWith(".csv")) {
+            processCSV(content, task);
+        } else {
+            alert("Only support for JSON or CSV file!");
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+function fixJSON(content) {
+    try {
+        if (typeof content !== "string") {
+            console.error("Input data is not in JSON format:", content);
+            return null;
+        }
+        try {
+            const parsed = JSON.parse(content);
+            if (Array.isArray(parsed)) {
+                return content;
+            }
+        } catch (err) {
+        }
+        
+        const lines = content.trim().split("\n").map(line => line.trim()).filter(line => line);
+        
+        let records = [];
+        lines.forEach(line => {
+            try {
+                const parsedLine = JSON.parse(line);
+                if (Array.isArray(parsedLine)) {
+                    records.push(...parsedLine);
+                } else {
+                    records.push(parsedLine);
+                }
+            } catch (e) {
+                console.error("Error parsing line:", line, e);
+            }
+        });
+        
+        return JSON.stringify(records);
+    } catch (error) {
+        console.error("Error JSON:", error);
+        return null;
+    }
+}
+
+function processJSON(content, task) {
+    try {
+        content = fixJSON(content);
+        const data = JSON.parse(content);
+
+        if (!Array.isArray(data)) {
+            alert("File JSON không hợp lệ. Cần danh sách các đối tượng.");
+            return;
+        }
+        if(task == 'extractAspects'){
+            sendRequests(data);
+        }
+        else{
+            preprocessingData(data);
+        }
+    } catch (error) {
+        console.error("Lỗi phân tích JSON:", error);
+        alert("File JSON không hợp lệ.");
+    }
+}
+
+function processCSV(content, task) {
+    // Sử dụng PapaParse để phân tích nội dung CSV với header tự động
+    const results = Papa.parse(content, {
+        header: true,
+        skipEmptyLines: true,
+        trimHeaders: true,
+        dynamicTyping: true
+    });
+    
+    const data = results.data;
+    const headers = results.meta.fields;
+    
+    // Kiểm tra sự tồn tại của các cột cần thiết
+    const requiredColumns = ["asin", "user_id", "text"];
+    const hasRequiredColumns = requiredColumns.every(col => headers.includes(col));
+    
+    if (!hasRequiredColumns) {
+        alert("File CSV cần có các cột: asin, user_id, text");
+        return;
+    }
+    
+    // Gọi hàm xử lý tương ứng dựa vào task
+    if (task === 'extractAspects') {
+        sendRequests(data);
+    } else {
+        preprocessingData(data);
+    }
+}
+
+function splitRecords(processedResults) {
+    const newRecords = [];
+
+    processedResults.forEach(record => {
+        if (record.processedText && Array.isArray(record.processedText)) {
+            record.processedText.forEach(sentence => {
+                newRecords.push({
+                    reviewId: record.reviewId,
+                    asin: record.asin,
+                    user_id: record.user_id,
+                    text: sentence.trim() // Loại bỏ khoảng trắng thừa
+                });
+            });
+        }
+    });
+
+    return newRecords;
+}
+
+//#endregion
+
+//#region handle functions
 function sendMessage() {
     const input = document.getElementById("message");
     const message = input.value.trim();
@@ -73,112 +228,6 @@ function resetChat() {
     .catch(error => console.error("Lỗi:", error));
 }
 
-function handleKeyPress(event) {
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-}
-
-let processedResults = []; // Lưu kết quả sau khi gọi API
-
-
-function hideDownloadButton(){
-    const downloadButton = document.getElementById("download-button");
-    downloadButton.style.display = "none";
-}
-
-function processFile(task) {
-    const fileInput = document.getElementById("fileInput");
-    const file = fileInput.files[0];
-    
-    if (!file) {
-        alert("Please choose JSON or CSV file!");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-        const content = event.target.result;
-
-        if (file.name.endsWith(".json")) {
-            processJSON(content, task);
-        } else if (file.name.endsWith(".csv")) {
-            processCSV(content, task);
-        } else {
-            alert("Only support for JSON or CSV file!");
-        }
-    };
-
-    reader.readAsText(file);
-}
-
-function fixJSON(content) {
-    try {
-        if (typeof content !== "string") {
-            console.error("Input datas is not in JSON format:", content);
-            return null;
-        }
-
-        const jsonObjects = content.trim().split("\n").map(line => line.trim()).filter(line => line);
-        const fixedJson = "[" + jsonObjects.join(",") + "]";
-
-        return fixedJson;
-    } catch (error) {
-        console.error("Error JSON:", error);
-        return null;
-    }
-}
-
-function processJSON(content, task) {
-    try {
-        content = fixJSON(content);
-        const data = JSON.parse(content);
-
-        if (!Array.isArray(data)) {
-            alert("File JSON không hợp lệ. Cần danh sách các đối tượng.");
-            return;
-        }
-        if(task == 'extractAspects'){
-            sendRequests(data);
-        }
-        else{
-            preprocessingData(data);
-        }
-    } catch (error) {
-        console.error("Lỗi phân tích JSON:", error);
-        alert("File JSON không hợp lệ.");
-    }
-}
-
-function processCSV(content, task) {
-    const lines = content.split("\n");
-    const headers = lines[0].split(",");
-    const data = [];
-
-    if (!headers.includes("asin") || !headers.includes("user_id") || !headers.includes("text")) {
-        alert("File CSV cần có các cột: asin, user_id, text");
-        return;
-    }
-
-    for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(",");
-        if (values.length === headers.length) {
-            let obj = {};
-            headers.forEach((header, index) => {
-                obj[header.trim()] = values[index].trim();
-            });
-            data.push(obj);
-        }
-    }
-    if(task == 'extractAspects'){
-        sendRequests(data);
-    }
-    else{
-        preprocessingData(data);
-    }
-}
-
 async function sendRequests(data) {
     processedResults = []; // Reset danh sách kết quả
     const totalRequests = data.length;
@@ -209,9 +258,13 @@ async function sendRequests(data) {
             if (!result.error && result.aspectTerms && result.aspectTerms.length > 0) {
                 // Lưu kết quả vào mảng
                 processedResults.push({
+                    reviewId: item.reviewId,
+                    rating: item.rating,
                     asin: item.asin,
                     user_id: item.user_id,
                     text: item.text,
+                    helpful_vote: item.helpful_vote,
+                    verified_purchase: item.verified_purchase,
                     aspectTerms: result.aspectTerms
                 });
             }
@@ -224,8 +277,9 @@ async function sendRequests(data) {
         const progressPercent = Math.round((completedRequests / totalRequests) * 100);
         progressIndicator.style.width = progressPercent + "%";
         progressText.innerText = `Processing ... ${progressPercent}%`;
+        
     }
-
+    current_task = "extractAspects";
     progressText.innerText = "Extraction completed";
     downloadButton.style.display = "inline"; // Hiển thị nút tải kết quả
     
@@ -233,21 +287,6 @@ async function sendRequests(data) {
         progressBar.style.display = "none";
     }, 2000);
 }
-
-function downloadResults() {
-    if (processedResults.length === 0) {
-        alert("There nothing to download");
-        return;
-    }
-
-    const jsonData = JSON.stringify(processedResults, null, 4);
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "aspects_file.json";
-    link.click();
-}
-
 
 //pre-processing data
 async function preprocessingData(data) {
@@ -281,9 +320,13 @@ async function preprocessingData(data) {
             // Giả sử API trả về kết quả ở thuộc tính 'sentences'
             if (!result.error && result.sentences && result.sentences.length > 0) {
                 processedResults.push({
+                    reviewId: item.reviewId,
+                    rating: item.rating,
                     asin: item.asin,
                     user_id: item.user_id,
                     text: item.text,
+                    helpful_vote: item.helpful_vote,
+                    verified_purchase: item.verified_purchase,
                     processedText: result.sentences  // Mảng các câu sau tiền xử lý
                 });
             }
@@ -298,6 +341,7 @@ async function preprocessingData(data) {
         progressText.innerText = `Processing ... ${progressPercent}%`;
     }
 
+    current_task = "preProcessing";
     progressText.innerText = "Extraction completed";
     downloadButton.style.display = "inline"; // Hiển thị nút download
 
@@ -305,4 +349,23 @@ async function preprocessingData(data) {
         progressBar.style.display = "none";
     }, 2000);
 }
+
+function downloadResults() {
+    if (processedResults.length === 0) {
+        alert("There nothing to download");
+        return;
+    }
+    if(current_task == "preProcessing"){
+        processedResults = splitRecords(processedResults);
+    }
+    const jsonData = JSON.stringify(processedResults, null, 4);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "aspects_file.json";
+    link.click();
+}
+//#endregion
+
+
 

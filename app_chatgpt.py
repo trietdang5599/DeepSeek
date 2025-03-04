@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify, render_template, session
+from flask import Flask, request, jsonify, render_template
 import json
 from openai import OpenAI
 from preprocessing import split_sentences_and_filter_sentiment
 
-MAX_SESSION_SIZE = 4000
 app = Flask(__name__)
 app.secret_key = "TrietChatBot"
 
@@ -14,8 +13,8 @@ client = OpenAI(
     project="proj_Y6a6fJdGqPDSlGgA8znbvL7D"
 )
 
-async def fetch_ai_response(payload, max_retries=5):
-    """ Gọi API ChatGPT với tối đa 5 lần thử nếu phản hồi không hợp lệ """
+async def fetch_ai_response(payload, max_retries=2):
+    """Gọi API ChatGPT với tối đa 5 lần thử nếu phản hồi không hợp lệ."""
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
@@ -25,12 +24,13 @@ async def fetch_ai_response(payload, max_retries=5):
             )
             
             ai_response = response.choices[0].message.content.strip()
-            
             # Làm sạch JSON (loại bỏ markdown nếu có)
             clean_json_str = ai_response.strip("```json").strip("```")
             ai_response_json = json.loads(clean_json_str)
 
-            if "aspectTerms" in ai_response_json and isinstance(ai_response_json["aspectTerms"], list) and ai_response_json["aspectTerms"]:
+            if ("aspectTerms" in ai_response_json and 
+                isinstance(ai_response_json["aspectTerms"], list) and 
+                ai_response_json["aspectTerms"]):
                 return ai_response_json
             
             print(f"⚠️ API attempt {attempt+1} failed: No valid aspects. Retrying...")
@@ -40,7 +40,17 @@ async def fetch_ai_response(payload, max_retries=5):
         except Exception as e:
             print(f"⚠️ API attempt {attempt+1} failed: {e}. Retrying...")
 
-    return None  
+    # Nếu không có phản hồi hợp lệ sau max_retries, trả về giá trị mặc định
+    return {
+        "aspectTerms": [
+            {
+                "opinion": "NULL", 
+                "polarity": None,
+                "term": "noaspectterm"
+            }
+        ]
+    }
+
 
 @app.route('/')
 def index():
@@ -53,45 +63,34 @@ async def chat():
     
     if not user_message:
         return jsonify({"error": "Message cannot be empty"}), 400
-    
-    chat_history = session.get("chat_history", [])
-    session_size = len(json.dumps(chat_history).encode('utf-8'))
-    
-    if session_size > MAX_SESSION_SIZE:
-        print(f"⚠️ Session size {session_size} bytes exceeds limit. Clearing session.")
-        session.clear()
 
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-    
     prompt = f"""Extract the key aspects mentioned in the following review and return them in JSON format.
                  Ensure the response follows this format: 
                  "aspectTerms": [
-                            {{"term": "term1", 'opinion': 'adj', "polarity": "positive/neutral/negative"}},
-                            {{"term": "term2", 'opinion': 'adj', "polarity": "positive/neutral/negative"}}
-                ]
+                     {{"term": "term1", "opinion": "adj", "polarity": "positive/neutral/negative"}},
+                     {{"term": "term2", "opinion": "adj", "polarity": "positive/neutral/negative"}}
+                 ]
                  Review: "{user_message}"."""
-    
-    session['chat_history'].append({"role": "user", "content": prompt})
+                    
+    # Chỉ gửi prompt của lần tương tác hiện tại
+    messages = [{"role": "user", "content": prompt}]
 
     payload = {
         "model": "gpt-4o-mini",
-        "messages": session['chat_history']
+        "messages": messages
     }
 
     ai_response = await fetch_ai_response(payload)
 
     if ai_response:
-        session['chat_history'].append({"role": "assistant", "content": json.dumps(ai_response)})
-        session.modified = True
         return jsonify(ai_response)
     
     return jsonify({"error": "AI failed to generate valid aspects after 5 attempts"}), 500
 
 @app.route('/api/reset', methods=['POST'])
 def reset_chat():
-    session.pop('chat_history', None)
-    return jsonify({"message": "Chat history cleared"})
+    # Vì không lưu trữ chat history nên chỉ trả về thông báo
+    return jsonify({"message": "Chat session does not store history."})
 
 @app.route('/run-preprocessing', methods=['POST'])
 def run_preprocessing():

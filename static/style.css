@@ -14,7 +14,8 @@ body {
 #chat-log {
     border: 1px solid #ccc;
     padding: 10px;
-    height: 700px;
+    height: 590px;
+    text-wrap: inherit;
     overflow-y: auto;
     background: #fff;
     border-radius: 5px;
@@ -25,9 +26,13 @@ body {
     border-radius: 5px;
     max-width: 80%;
 }
+#file-upload-container{
+    padding-top: 15px;
+}
+
 .user { background-color: #007bff; color: white; text-align: right; }
-.bot { background-color: #2d2e2d; color: white; text-align: left; }
-#input-container { display: flex; gap: 10px; }
+.bot { background-color: #2d2e2d; color: white; text-align: left; text-wrap: inherit;}
+#input-container { display: flex; gap: 10px; padding-top: 15px;}
 #message { flex-grow: 1; padding: 10px; border-radius: 5px; }
 button { padding: 10px 15px; background: #007bff; color: white; border-radius: 5px; cursor: pointer; }
 button:hover { background: #0056b3; }

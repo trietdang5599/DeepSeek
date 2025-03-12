@@ -13,11 +13,11 @@ from utils.util import read_txt_file_to_list
 
 
 # Tải các tài nguyên cần thiết từ NLTK một lần duy nhất
-nltk.download('averaged_perceptron_tagger')
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('vader_lexicon')
-nltk.download('punkt_tab')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('vader_lexicon')
+# nltk.download('punkt_tab')
 
 tagger = TextClassifier.load('en-sentiment')
 nlp = spacy.load("en_core_web_sm")

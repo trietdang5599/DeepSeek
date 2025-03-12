@@ -50,6 +50,76 @@ function processFile(task) {
     reader.readAsText(file);
 }
 
+function processCategoryFile() {
+    const fileInput = document.getElementById("fileCategory");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please choose a JSON file!");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        try {
+            let content = event.target.result;
+            if (!file.name.endsWith(".json")) {
+                alert("Only JSON files are supported!");
+                return;
+            }
+            content = fixJSON(content);
+            let jsonData = JSON.parse(content);
+            if (!Array.isArray(jsonData)) {
+                alert("Invalid JSON format. It should be a list of objects.");
+                return;
+            }
+
+            const categoryDict = {};
+            jsonData.forEach(item => {
+                if (item.category && item.relatedAspects) {
+                    const aspects = item.relatedAspects.split(", ").map(a => a.trim());
+                    categoryDict[item.category] = aspects;
+                }
+            });
+
+            saveCategoryData(categoryDict);
+            
+
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            alert("Invalid JSON file.");
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+function saveCategoryData(categoryDict) {
+    console.log("Sending category data:", categoryDict);
+
+    fetch("/api/save-categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(categoryDict)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("API Response:", data);
+        alert("✅ Categories saved successfully!");
+    })
+    .catch(error => {
+        console.error("Error sending data:", error);
+        alert("❌ Failed to save categories. Please try again.");
+    });
+}
+
+
 function fixJSON(content) {
     try {
         if (typeof content !== "string") {
@@ -156,6 +226,73 @@ function splitRecords(processedResults) {
     return newRecords;
 }
 
+// function processJSONForCategories() {
+//     const fileCategory = document.getElementById("fileCategory");
+//     const file = fileCategory.files[0];
+
+//     if (!file) {
+//         alert("Please choose a JSON file!");
+//         return;
+//     }
+
+//     // Kiểm tra phần mở rộng file
+//     if (!file.name.endsWith(".json")) {
+//         alert("Please upload a valid JSON file.");
+//         return;
+//     }
+
+//     const reader = new FileReader();
+
+//     reader.onload = function (event) {
+//         try {
+//             // Đọc nội dung JSON
+//             const content = event.target.result;
+//             const jsonData = JSON.parse(content);
+
+//             // Kiểm tra nếu dữ liệu là mảng danh sách các danh mục
+//             if (!Array.isArray(jsonData)) {
+//                 alert("Invalid JSON format. Expected an array of objects.");
+//                 return;
+//             }
+
+//             // Kiểm tra định dạng của từng phần tử
+//             const categoryDict = jsonData.reduce((acc, row) => {
+//                 if (row.category && Array.isArray(row.relatedAspects)) {
+//                     acc[row.category] = row.relatedAspects.map(item => item.trim());
+//                 }
+//                 return acc;
+//             }, {});
+
+//             if (Object.keys(categoryDict).length === 0) {
+//                 alert("No valid data found in the JSON file!");
+//                 return;
+//             }
+
+//             console.log("Processed Category Data:", categoryDict);
+//             storeCategoriesToAPI(categoryDict);
+
+//         } catch (error) {
+//             alert("Error processing JSON file: " + error.message);
+//         }
+//     };
+
+//     reader.readAsText(file);
+// }
+
+// // Hàm gửi dữ liệu danh mục lên API
+// function storeCategoriesToAPI(categoryDict) {
+//     Object.entries(categoryDict).forEach(([category, relatedAspects]) => {
+//         fetch('/api/store', {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify({ category, relatedAspects })
+//         })
+//         .then(response => response.json())
+//         .then(data => console.log("API Response:", data))
+//         .catch(error => console.error("Error sending data to API:", error));
+//     });
+// }
+
 //#endregion
 
 //#region handle functions
@@ -189,6 +326,9 @@ function sendMessage() {
         } else if (data.aspectTerms && data.aspectTerms.length > 0) {
             // Tạo danh sách aspects và sentiment
             let aspectList = "<ul>";
+            aspectList += `<li style="width: 500px;overflow-wrap: break-word;">
+                            <strong>Category:</strong> ${data.category} <br>
+                        </li>`;
             data.aspectTerms.forEach(a => {
                 let polarityColor = "gray"; // Mặc định màu trung tính
                 if (a.polarity === "positive") polarityColor = "green";
@@ -218,14 +358,6 @@ function sendMessage() {
         errorMessage.innerHTML = `<strong>AI:</strong> <span class="error">Lỗi kết nối API.</span>`;
         chatLog.appendChild(errorMessage);
     });
-}
-
-function resetChat() {
-    fetch("/api/reset", { method: "POST" })
-    .then(() => {
-        document.getElementById("chat-log").innerHTML = "";
-    })
-    .catch(error => console.error("Lỗi:", error));
 }
 
 async function sendRequests(data) {
@@ -265,6 +397,7 @@ async function sendRequests(data) {
                     text: item.text,
                     helpful_vote: item.helpful_vote,
                     verified_purchase: item.verified_purchase,
+                    category: result.category,
                     aspectTerms: result.aspectTerms
                 });
             }

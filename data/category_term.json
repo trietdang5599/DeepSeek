@@ -1,0 +1,382 @@
+[
+    {
+        "Id": 0,
+        "category": "ACCESSORY#DESIGN_FEATURES",
+        "relatedAspects": "item, original, case, bulky, nice and sharp looking, front part extension, design, slots, wrong size, look, phone case, appearance, transparency, looks, non clunky look, back, color, edges, power brick, power supply ac, plug adapter"
+    },
+    {
+        "Id": 1,
+        "category": "ACCESSORY#GENERAL",
+        "relatedAspects": "something else, spare, camo case, recommendation, case, wrks, bracket, protective wear, parlor trick, way it felt, fit the phone, Beautiful, functional, cards and money carrying, husband, different model, kids, computer, msi protective cloth for screen & keyboard, out protective cloth"
+    },
+    {
+        "Id": 2,
+        "category": "ACCESSORY#USABILITY",
+        "relatedAspects": "works, grandson's behavior, item, install, phone, fit, installation time, alignment, charged, kickstand, weight, clamps, worked as a stand, case for protection, replacement for a wallet, clips, removability, stays in place, adhesion, removal, watch bands, charger, charging while in use, docking station, cooling pad"
+    },
+    {
+        "Id": 3,
+        "category": "ACCESSORY#PRICE",
+        "relatedAspects": "fitbit cable, price, case"
+    },
+    {
+        "Id": 4,
+        "category": "CELL_PHONE#GENERAL",
+        "relatedAspects": "end result, puzzles, concentration, screws, product, stocking stuffers, location, bubbles escaping, works, gift, phone, phone for frills and thrills, virgin phone, variety, diverse, gifts, system for application, ease of application, straight application, iPhone 8, box, fit, LG product, pixel 3, pixel 6, paint, iPhone 14 plus, view, experience, iPads, arrival, gaming PC, investment, packaging"
+    },
+    {
+        "Id": 5,
+        "category": "SERVICE#SUPPORT",
+        "relatedAspects": "YouTube video, customer service, service, directions, apply, returns, customer support, time spent on calls, return process, company, response from seller, website, got help, register, tech support, tech appearance, tech knowledge, overall experience, repair service, repair time, Lenovo support, repair process"
+    },
+    {
+        "Id": 6,
+        "category": "ACCESSORY#QUALITY",
+        "relatedAspects": "tools and supplies, value, sound, performance, comparison, fits, stays in vent, magnet strength, wire, break, case, sturdy, magnet, broken, magnetic hold, bendable arm, clips, quality, cover, made, this one, materials, AC power adapter design, power plug, speed"
+    },
+    {
+        "Id": 7,
+        "category": "DISPLAY#QUALITY",
+        "relatedAspects": "glass Screen, screen protector, dust under the screen, pictures, directions, durability, adhesive, video quality, display quality, screen, colors, bezel, dead pixel, video, display, 15.6 inch 1366x768 display, screen dots, screen clarity, IPS panel"
+    },
+    {
+        "Id": 8,
+        "category": "DISPLAY#DESIGN_FEATURES",
+        "relatedAspects": "modifications, screen replacement, screen, screen coverage, cool factor, looks, display"
+    },
+    {
+        "Id": 9,
+        "category": "HARDWARE#QUALITY",
+        "relatedAspects": "lock button, speaker location, quality control"
+    },
+    {
+        "Id": 10,
+        "category": "CELL_PHONE#PRICE",
+        "relatedAspects": "costing, price, value for money, money"
+    },
+    {
+        "Id": 11,
+        "category": "CELL_PHONE#ACCESSORIES",
+        "relatedAspects": "case, expensive $35 cases, Magna Case, IPods, case with a popsocket"
+    },
+    {
+        "Id": 12,
+        "category": "PROTECTION#GENERAL",
+        "relatedAspects": "phone, protection, scratches, protectors, case"
+    },
+    {
+        "Id": 13,
+        "category": "ACCESSORY#REVIEWS",
+        "relatedAspects": "Apple watch, recommend, band"
+    },
+    {
+        "Id": 14,
+        "category": "SERVICE#DELIVERY",
+        "relatedAspects": "shipping, arrived, delivery, product shipped, shipping weight, item, seller"
+    },
+    {
+        "Id": 15,
+        "category": "CELL_PHONE#CHARGERS",
+        "relatedAspects": "charges, charger, charging, charging method, charging capability"
+    },
+    {
+        "Id": 16,
+        "category": "CELL_PHONE#USABILITY",
+        "relatedAspects": "yellow side, big phones, sticks, fits, grip, ring, laying your phone flat, headboard, mobile sim card compatibility, needed, charged with case, hat on the yoga kitty, use, works, product, husband’s upgrade, sizing abilities, handiness"
+    },
+    {
+        "Id": 17,
+        "category": "CELL_PHONE#OPERATION_PERFORMANCE",
+        "relatedAspects": "works, phone performance, trouble, calls, text messages, missed calls, stopped working, speed, functionality, phone"
+    },
+    {
+        "Id": 18,
+        "category": "CELL_PHONE#DESIGN_FEATURES",
+        "relatedAspects": "looks, fit, color, the description, customer photos, hat on the yoga kitty, colors, design"
+    },
+    {
+        "Id": 19,
+        "category": "CELL_PHONE#REVIEWS",
+        "relatedAspects": " reviews, clean phone"
+    },
+    {
+        "Id": 20,
+        "category": "PORTS#GENERAL",
+        "relatedAspects": "portals, USB port, HDMI interface"
+    },
+    {
+        "Id": 21,
+        "category": "CELL_PHONE#QUALITY",
+        "relatedAspects": "tightening, product quality, quality, refurbished, reliable, durability, condition, scratches, dents, cracks, imperfections"
+    },
+    {
+        "Id": 22,
+        "category": "CELL_PHONE#BATTERY_CHARGING",
+        "relatedAspects": "charging"
+    },
+    {
+        "Id": 23,
+        "category": "WEARABLE_DEVICE#GENERAL",
+        "relatedAspects": "band, wait time, watch, bands, colors, fit"
+    },
+    {
+        "Id": 24,
+        "category": "WEARABLE_DEVICE#USABILITY",
+        "relatedAspects": "fits, application, adhesive"
+    },
+    {
+        "Id": 25,
+        "category": "WEARABLE_DEVICE#QUALITY",
+        "relatedAspects": "air bubbles, bands"
+    },
+    {
+        "Id": 26,
+        "category": "WEARABLE_DEVICE#DESIGN_FEATURES",
+        "relatedAspects": "permanence"
+    },
+    {
+        "Id": 27,
+        "category": "MANUFACTURE#PRICE",
+        "relatedAspects": "made"
+    },
+    {
+        "Id": 28,
+        "category": "HARDWARE#GENERAL",
+        "relatedAspects": "some of parts, buttons on iphone 5, CD/DVD drive, hardware, lack of an optical drive, piece of hardware, ssd, upgrade-able hardware"
+    },
+    {
+        "Id": 29,
+        "category": "SERVICE#PRICE",
+        "relatedAspects": "return, restocking fee, cost of repairs, service center"
+    },
+    {
+        "Id": 30,
+        "category": "CELL_PHONE#PURCHASE",
+        "relatedAspects": ""
+    },
+    {
+        "Id": 31,
+        "category": "SERVICE#POLICY",
+        "relatedAspects": "contract, return it, return policy, replacement policy"
+    },
+    {
+        "Id": 32,
+        "category": "SERVICE#SELLING",
+        "relatedAspects": "cable, online purchase, seller, returning, advertising, 16GB, 8GB model, return process, purchase, laptop"
+    },
+    {
+        "Id": 33,
+        "category": "DISPLAY#OPERATION_PERFORMANCE",
+        "relatedAspects": "reflective surface, worked, fingerprint reader, touch screen, performance, HD video performance, screen, video interaction, video options, 4K monitor"
+    },
+    {
+        "Id": 34,
+        "category": "PRODUCT#PRICE",
+        "relatedAspects": "value for money, price, value"
+    },
+    {
+        "Id": 35,
+        "category": "DISPLAY#USABILITY",
+        "relatedAspects": "temporary use, touch screen, screen, viewing experience, watch movie, touch screen feature, narrow viewing range, tablet functionality, second display"
+    },
+    {
+        "Id": 36,
+        "category": "BRANDING#GENERAL",
+        "relatedAspects": "brand, current one, JETech, Spigen, Lenovo, alienware, dell, MSI, trust in company, hp laptop, amazon, asus or alienware, future purchase, Apple computers, Apple"
+    },
+    {
+        "Id": 37,
+        "category": "PRODUCT#USABILITY",
+        "relatedAspects": "use at desk, using in their cars, return process"
+    },
+    {
+        "Id": 38,
+        "category": "BATTERY#OPERATION_PERFORMANCE",
+        "relatedAspects": "charge, energy, power, time, battery life, battery, usage duration"
+    },
+    {
+        "Id": 39,
+        "category": "DISPLAY#GENERAL",
+        "relatedAspects": "screen protector, instructions, screen, picture, monitor, screen resolution, touchscreen, display"
+    },
+    {
+        "Id": 40,
+        "category": "PRODUCT#QUALITY",
+        "relatedAspects": "no bubbles, refund speed, build quality, durability, overall quality, computer"
+    },
+    {
+        "Id": 41,
+        "category": "SERVICE#WARRANTY",
+        "relatedAspects": "warranty, warranty service, warranty process"
+    },
+    {
+        "Id": 42,
+        "category": "WEARABLE_DEVICE#PRICE",
+        "relatedAspects": "price"
+    },
+    {
+        "Id": 43,
+        "category": "APPLICATION#BRANDING",
+        "relatedAspects": "spigen cases"
+    },
+    {
+        "Id": 44,
+        "category": "LAPTOP#QUALITY",
+        "relatedAspects": "work station, laptop, personal laptop quality, windows 8 frustrations, streamed video performance, sturdiness, ClickPad touchpad, cost-cutting measures, materials, quality, processing speed, systems, durability, casing, build quality, computer, superior, durable, condition, laptop quality, metal frame, reliability, Dells, Lenovo workstations, piece of crap"
+    },
+    {
+        "Id": 45,
+        "category": "LAPTOP#OPERATION_PERFORMANCE",
+        "relatedAspects": "work station, specs, light gaming performance, stellar gaming, built-in webcam, specifications, boot/hibernate/wake/sleep speed, battery life, performance, performance over time,  noaspectterm, performance requirement, works, handles everything, restarts, runs, orders, play, power, laptop performance, BSOD, systems, speed, performance under load, startup speed, sluggish performance, performance of the Acer, Chromebooks, cheap Windows computers, 12 tabs, tablet functionality, fliplock, no problems, 6GB RAM laptop, fast, games and apps, gaming and animation, rendering or heavy work, boot up time, gaming, powerful, gaming performance, CAD programs, issues, CAD, video editing, boot speed, workhorse, high powered machine, simulations, design, SOLIDWORKS performance, response, solidworks, replacement, Start up problem"
+    },
+    {
+        "Id": 46,
+        "category": "LAPTOP#GPU",
+        "relatedAspects": "nvidia quadro 1000m card, video card, gtx 970, gpu, 970m, GPU, Quadro Passmark scores"
+    },
+    {
+        "Id": 47,
+        "category": "LAPTOP#CPU",
+        "relatedAspects": "2.2ghz processor, i7 CPU, NVIIA Tegra K1, i3 4030 chip, i3 speed, i7-4712hq faithful processor, Passmark CPU scores"
+    },
+    {
+        "Id": 48,
+        "category": "SERVICE#DEAL",
+        "relatedAspects": "deal, back to school discount"
+    },
+    {
+        "Id": 49,
+        "category": "LAPTOP#USABILITY",
+        "relatedAspects": "additions, touch pad, setup process, trackpad, WiFi connection, ergonomics, use, machine, touchpad, connect, laptop, desk top use,  lag or other issues, track pad, mouse responsiveness, highlighting without mouse, versatile, user experience, ease of use, WiFi, game design, screwdriver, dock connection, fingerprint reader, mouse buttons, upgradeability, tactile sensation, track pad placement, highlighting, mouse pad, mouse"
+    },
+    {
+        "Id": 50,
+        "category": "LAPTOP#DESIGN_FEATURES",
+        "relatedAspects": "laptop, designed, feel, the bottom of the laptop, packaging, machine, windows 8 appearance, overall look and feel, design, item, looks, casing, lights, exterior, attractive, track pad, click portion of the track pad, folds, tablet, slim, tablet/laptop feature, features, size, aluminum case, aluminium chassis, appeal, on demand features, form factor, ultrabay removal switch, thinness, power supply, power supply caution, CAD workstation, Trackpoint buttons"
+    },
+    {
+        "Id": 51,
+        "category": "LAPTOP#REQUIREMENTS",
+        "relatedAspects": "requirements of an ultrabook, cooling pad"
+    },
+    {
+        "Id": 52,
+        "category": "MEMORY#GENERAL",
+        "relatedAspects": "memory, 4g of memory, extra RAM"
+    },
+    {
+        "Id": 53,
+        "category": "LAPTOP#PRICE",
+        "relatedAspects": "price, purchase, value for price, competitive pricing, touchscreen, deal, value, value for money"
+    },
+    {
+        "Id": 54,
+        "category": "LAPTOP#WEIGHT",
+        "relatedAspects": "weight, weight and size, lightness, light weight, laptop, portability, lightweight"
+    },
+    {
+        "Id": 55,
+        "category": "LAPTOP#GENERAL",
+        "relatedAspects": "laptop, computer, T540p, packaging, product, buy, pc, this laptop, gaming laptop, little laptop, gaming machine, computers, model, overall experience, chrome book, device functions, Chromebook, chromebook , laptop replacement, great success, Touch-Screen Laptop, ASUS Flip laptop, desktop pc, Surface pro 4, Alienware 13.3, machine, professional laptop, base model, W541, W540, work computer, purchase, problems, Notebook, device"
+    },
+    {
+        "Id": 56,
+        "category": "OS#GENERAL",
+        "relatedAspects": "Windows 8 experience, McAfee anti-virus software, Microsoft Security Essentials, Windows 8, Windows 10, Windows 8.1 power management, operating system, Chrome OS, antivirus software, updates, apps, chrome os, Windows 8.1, word processing software, learning curve, drivers installation, Windows DPI Scaling, Lenovo bloatware, s/w updates, software problem"
+    },
+    {
+        "Id": 57,
+        "category": "DISPLAY#RESOLUTION",
+        "relatedAspects": "screen resolution, screen, video quality, lower resolution screen, lower res screen, 1920x1080 display, 4k screen, 1080p resolution"
+    },
+    {
+        "Id": 58,
+        "category": "LAPTOP#REVIEWS",
+        "relatedAspects": "overall satisfaction, Thinkpad experience, Chromebook experience, complaints, new gaming laptop, overall rating, experience"
+    },
+    {
+        "Id": 59,
+        "category": "MEMORY#DESIGN_FEATURES",
+        "relatedAspects": "embedded memory, memory"
+    },
+    {
+        "Id": 60,
+        "category": "KEYBOARD#GENERAL",
+        "relatedAspects": "dark keys, keyboard button for OS lock, function keys, keyboard offset, keyboard, feel, missing keys, virtual keyboard, keyboards, keystrokes, spacebar, typing experience, keyboard comfort, 10-key pad placement, keyboard quality, Chiclet Keyboard, number pad, replacement touch pad, island style keyboard, numeric pad"
+    },
+    {
+        "Id": 61,
+        "category": "HARDWARE#OPERATION_PERFORMANCE",
+        "relatedAspects": "speakers, sound, killer lan, hardware, sound system, beeps"
+    },
+    {
+        "Id": 62,
+        "category": "MEMORY#UPGRADABLE",
+        "relatedAspects": "RAM, RAM (4Gb)"
+    },
+    {
+        "Id": 63,
+        "category": "OS#COMPATIBLE",
+        "relatedAspects": "windows, device architecture"
+    },
+    {
+        "Id": 64,
+        "category": "FANS&COOLING#OPERATION_PERFORMANCE",
+        "relatedAspects": "noise level, heat generation, silence, heat, temperature, cooling booster, cooling system, fans"
+    },
+    {
+        "Id": 65,
+        "category": "HARD_DISC#OPERATION_PERFORMANCE",
+        "relatedAspects": "defragment hard drive, harddrive capability, 5400RPM drive, SSD, Super Raid 3 technology, hard drive bay mechanism, rubber bands for hard drives, 1TB Samsung SSD, SSD drive"
+    },
+    {
+        "Id": 66,
+        "category": "APPLICATION#GENERAL",
+        "relatedAspects": "work"
+    },
+    {
+        "Id": 67,
+        "category": "OS#USABILITY",
+        "relatedAspects": "the update to W10"
+    },
+    {
+        "Id": 68,
+        "category": "SOFTWARE#GENERAL",
+        "relatedAspects": "pre installed software"
+    },
+    {
+        "Id": 69,
+        "category": "LAPTOP#GRAPHICS",
+        "relatedAspects": "apu intel hd graphics 4600"
+    },
+    {
+        "Id": 70,
+        "category": "LAPTOP#AUDIO",
+        "relatedAspects": "dynaudio + sound blaster cinema system"
+    },
+    {
+        "Id": 71,
+        "category": "KEYBOARD#DESIGN_FEATURES",
+        "relatedAspects": "steelseries keyboard"
+    },
+    {
+        "Id": 72,
+        "category": "KEYBOARD#USABILITY",
+        "relatedAspects": "steelseries keyboard"
+    },
+    {
+        "Id": 73,
+        "category": "MEMORY#USABILITY",
+        "relatedAspects": "ram arrangement"
+    },
+    {
+        "Id": 74,
+        "category": "KEYBOARD#BRANDING",
+        "relatedAspects": "another brand"
+    },
+    {
+        "Id": 75,
+        "category": "KEYBOARD#TRIET",
+        "relatedAspects": "another brand"
+    }
+]

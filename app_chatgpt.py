@@ -1,17 +1,29 @@
 from flask import Flask, request, jsonify, render_template
 import json
+import re
 from openai import OpenAI
 from preprocessing import split_sentences_and_filter_sentiment
 
 app = Flask(__name__)
 app.secret_key = "TrietChatBot"
+category_dict = {}
 
 # Initialize OpenAI client
 client = OpenAI(
-    api_key="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",  # Thay thế bằng API Key của bạn
-    organization="org-6OKJYIXzvTJPG0ykg9uQkWEX",
-    project="proj_Y6a6fJdGqPDSlGgA8znbvL7D"
+
 )
+
+def match_aspects_to_categories(aspect_terms):
+    matched_categories = set()  # Sử dụng set để tránh trùng lặp
+
+    for item in aspect_terms:
+        for category, aspects in category_dict.items():
+            if item["term"] in aspects:
+                matched_categories.add(category)
+
+    return list(matched_categories) if matched_categories else ["unknown"]
+
+
 
 async def fetch_ai_response(payload, max_retries=2):
     """Gọi API ChatGPT với tối đa 5 lần thử nếu phản hồi không hợp lệ."""
@@ -31,6 +43,7 @@ async def fetch_ai_response(payload, max_retries=2):
             if ("aspectTerms" in ai_response_json and 
                 isinstance(ai_response_json["aspectTerms"], list) and 
                 ai_response_json["aspectTerms"]):
+                ai_response_json["category"]= match_aspects_to_categories(ai_response_json["aspectTerms"])
                 return ai_response_json
             
             print(f"⚠️ API attempt {attempt+1} failed: No valid aspects. Retrying...")
@@ -42,6 +55,7 @@ async def fetch_ai_response(payload, max_retries=2):
 
     # Nếu không có phản hồi hợp lệ sau max_retries, trả về giá trị mặc định
     return {
+        "category": ["unknown"],
         "aspectTerms": [
             {
                 "opinion": "NULL", 
@@ -50,7 +64,6 @@ async def fetch_ai_response(payload, max_retries=2):
             }
         ]
     }
-
 
 @app.route('/')
 def index():
@@ -65,10 +78,11 @@ async def chat():
         return jsonify({"error": "Message cannot be empty"}), 400
 
     prompt = f"""Extract the key aspects mentioned in the following review and return them in JSON format.
+                 Make sure term and opinion are keyword in the sentences
                  Ensure the response follows this format: 
                  "aspectTerms": [
-                     {{"term": "term1", "opinion": "adj", "polarity": "positive/neutral/negative"}},
-                     {{"term": "term2", "opinion": "adj", "polarity": "positive/neutral/negative"}}
+                     {{"term": "term1(noun1)", "opinion": "adj", "polarity": "positive/neutral/negative"}},
+                     {{"term": "term2(noun2)", "opinion": "adj", "polarity": "positive/neutral/negative"}}
                  ]
                  Review: "{user_message}"."""
                     
@@ -87,10 +101,22 @@ async def chat():
     
     return jsonify({"error": "AI failed to generate valid aspects after 5 attempts"}), 500
 
-@app.route('/api/reset', methods=['POST'])
-def reset_chat():
-    # Vì không lưu trữ chat history nên chỉ trả về thông báo
-    return jsonify({"message": "Chat session does not store history."})
+@app.route('/api/save-categories', methods=['POST'])
+def save_categories():
+    try:
+        # Nhận dữ liệu JSON từ request
+        data = request.get_json()
+
+        if not isinstance(data, dict):
+            return jsonify({"error": "Invalid format. Expected a dictionary."}), 400
+
+        # Cập nhật category_dict với dữ liệu mới
+        category_dict.update(data)
+
+        return jsonify({"message": "Categories saved successfully", "data": category_dict}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/run-preprocessing', methods=['POST'])
 def run_preprocessing():

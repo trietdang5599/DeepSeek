@@ -14,13 +14,16 @@
         <div id="input-container">
             <input type="text" id="message" placeholder="Input review text..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">Send</button>
-            <button onclick="resetChat()" style="background-color: red;">Reset</button>
         </div>
         <div id="file-upload-container">
-            <input type="file" id="fileInput" accept=".json, .csv" onchange="hideDownloadButton()">
-            <button onclick="processFile(task='preProcessing')" style="background-color: blue;">Run Preprocessing</button>
+            Input Data file: <input type="file" id="fileInput" accept=".json, .csv" onchange="hideDownloadButton()">
+            <button onclick="processFile(task='preProcessing')" style="background-color: blue;margin-left: 30px;width: 154px;">Run Preprocessing</button>
             <button onclick="processFile(task='extractAspects')">Extract Aspects</button>
             <button id="download-button" onclick="downloadResults()" style="background-color: green; display: none;">Download File Aspect</button>
+        </div>
+        <div id="file-upload-container">
+            Input Category file: <input type="file" id="fileCategory" accept=".json, .csv, .xlxs" >
+            <button onclick="processCategoryFile()" style="background-color: blue;">Save Category Data</button>
         </div>
         <div id="progress-bar" style="width: 100%; background-color: #ccc; border-radius: 5px; margin-top: 10px; display: none;">
             <div id="progress-indicator" style="height: 20px; width: 0%; background-color: #4caf50; border-radius: 5px;"></div>

@@ -495,7 +495,7 @@ function downloadResults() {
     const blob = new Blob([jsonData], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "aspects_file.json";
+    link.download = current_task + "_file.json";
     link.click();
 }
 //#endregion

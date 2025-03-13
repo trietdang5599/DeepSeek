@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify, render_template
 import json
-import re
 from openai import OpenAI
 from preprocessing import split_sentences_and_filter_sentiment
+from nltk.corpus import wordnet
+import nltk
 
+nltk.download('wordnet')
 app = Flask(__name__)
 app.secret_key = "TrietChatBot"
 category_dict = {}
@@ -13,16 +15,38 @@ client = OpenAI(
 
 )
 
+
+
+def get_synonyms(word):
+    synonyms = set()
+    for syn in wordnet.synsets(word):
+        for lemma in syn.lemmas():
+            synonyms.add(lemma.name().lower())  # Chuyển tất cả về chữ thường
+    return synonyms
+
 def match_aspects_to_categories(aspect_terms):
     matched_categories = set()  # Sử dụng set để tránh trùng lặp
 
     for item in aspect_terms:
+        term = item["term"].lower()
+        term_synonyms = get_synonyms(term) | {term}  # Lấy cả từ gốc và từ đồng nghĩa
+
         for category, aspects in category_dict.items():
-            if item["term"] in aspects:
+            aspect_set = set(map(str.lower, aspects))  # Chuyển aspects về chữ thường
+            if term_synonyms & aspect_set:  # Kiểm tra giao nhau giữa tập từ đồng nghĩa và aspects
                 matched_categories.add(category)
 
     return list(matched_categories) if matched_categories else ["unknown"]
 
+# def match_aspects_to_categories(aspect_terms):
+#     matched_categories = set()  # Sử dụng set để tránh trùng lặp
+
+#     for item in aspect_terms:
+#         for category, aspects in category_dict.items():
+#             if item["term"].lower() in aspects:
+#                 matched_categories.add(category)
+
+#     return list(matched_categories) if matched_categories else ["unknown"]
 
 
 async def fetch_ai_response(payload, max_retries=2):
@@ -78,13 +102,14 @@ async def chat():
         return jsonify({"error": "Message cannot be empty"}), 400
 
     prompt = f"""Extract the key aspects mentioned in the following review and return them in JSON format.
-                 Make sure term and opinion are keyword in the sentences
-                 Ensure the response follows this format: 
-                 "aspectTerms": [
-                     {{"term": "term1(noun1)", "opinion": "adj", "polarity": "positive/neutral/negative"}},
-                     {{"term": "term2(noun2)", "opinion": "adj", "polarity": "positive/neutral/negative"}}
-                 ]
-                 Review: "{user_message}"."""
+                    Ensure that both 'term' and 'opinion' are explicitly mentioned as keywords in the sentences.
+                    The response must strictly follow this format: 
+                    "aspectTerms": [
+                        {{"term": "term1(noun1)", "opinion": "adj1", "polarity": "positive/neutral/negative"}},
+                        {{"term": "term2(noun2)", "opinion": "adj2 ", "polarity": "positive/neutral/negative"}}
+                    ]
+                    Review: "{user_message}"."""
+
                     
     # Chỉ gửi prompt của lần tương tác hiện tại
     messages = [{"role": "user", "content": prompt}]
